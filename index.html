@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>我们认识了多久</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(to bottom, #fff4f4, #ffeaea);
+      color: #333;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+    }
+    p {
+      font-size: 1.2em;
+      margin: 0.2em;
+    }
+  </style>
+</head>
+<body>
+  <h1>我们认识了……</h1>
+  <p id="days"></p>
+  <p id="months"></p>
+
+  <script>
+    const startDate = new Date('2024-11-30');
+    const today = new Date();
+
+    const diffTime = today - startDate;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    document.getElementById('days').textContent = `已经 ${diffDays} 天啦 🥰`;
+
+    let months = (today.getFullYear() - startDate.getFullYear()) * 12 + (today.getMonth() - startDate.getMonth());
+    let dayDiff = today.getDate() - startDate.getDate();
+    if (dayDiff < 0) {
+      months -= 1;
+      const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+      dayDiff += lastMonth.getDate();
+    }
+
+    document.getElementById('months').textContent = `也就是 ${months} 个月 ${dayDiff} 天啦 💗`;
+  </script>
+</body>
+</html>
