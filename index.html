@@ -1,91 +1,87 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我们认识了多久</title>
-  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>我们在一起的日子</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom right, #fddde6, #e0f7fa);
-      font-family: 'ZCOOL XiaoWei', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      font-family: "Helvetica Neue", sans-serif;
+      background: linear-gradient(to right, #fceabb, #f8b500);
       color: #333;
       text-align: center;
+      padding: 50px;
     }
-    .card {
-      background: white;
-      padding: 2rem 3rem;
-      border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      max-width: 400px;
-    }
+
     h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+      font-size: 2.8em;
+      margin-bottom: 20px;
     }
-    p {
-      font-size: 1.2rem;
-      margin: 0.5rem 0;
+
+    #counter {
+      font-size: 2em;
+      margin-top: 10px;
     }
-    .highlight {
-      font-size: 1.5rem;
-      color: #e91e63;
-      font-weight: bold;
+
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #fff;
+      color: #f8b500;
+      border: 2px solid #f8b500;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
-    footer {
-      position: absolute;
-      bottom: 10px;
-      font-size: 0.9rem;
-      color: #888;
+
+    button:hover {
+      background-color: #f8b500;
+      color: white;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>👩‍❤️‍👨 我们认识了多久？</h1>
-    <p class="highlight" id="days"></p>
-    <p class="highlight" id="months"></p>
-    <p>📅 从：2024年11月30日</p>
-  </div>
+  <h1>我们在一起的日子</h1>
+  <div id="counter">加载中...</div>
 
-  <audio id="bg-music" autoplay loop preload="auto" muted>
-  <source src="assets/dream-wedding.mp3" type="audio/mpeg">
-  您的浏览器不支持 audio 标签。
-</audio>
+  <!-- 播放按钮 -->
+  <button onclick="document.getElementById('bg-music').play()">播放背景音乐 🎵</button>
 
-  <footer>By testcsl &hearts;</footer>
+  <!-- 背景音乐 -->
+  <audio id="bg-music" autoplay loop>
+    <source src="dream-wedding.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 标签。
+  </audio>
 
   <script>
-    // 自动播放音乐，等待用户第一次交互后取消静音
-    document.addEventListener('click', () => {
-      const bgm = document.getElementById('bg-music');
-      bgm.muted = false;
-      bgm.play();
-    }, { once: true });
+    // 设置确定关系的日期（格式：YYYY-MM-DD）
+    const startDate = new Date("2023-11-30");
 
-    const startDate = new Date("2024-11-30");
-    const now = new Date();
+    function updateCounter() {
+      const now = new Date();
+      const diffTime = now - startDate;
 
-    const diffTime = now - startDate;
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      // 计算总天数
+      const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-    let months = (now.getFullYear() - startDate.getFullYear()) * 12 + (now.getMonth() - startDate.getMonth());
-    let leftoverDays = now.getDate() - startDate.getDate();
-    if (leftoverDays < 0) {
-      months -= 1;
-      const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-      leftoverDays += prevMonth.getDate();
+      // 计算月数和天数
+      let months = (now.getFullYear() - startDate.getFullYear()) * 12 + (now.getMonth() - startDate.getMonth());
+      if (now.getDate() < startDate.getDate()) {
+        months--;
+      }
+
+      const daysInCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+      let remainingDays = now.getDate() - startDate.getDate();
+      if (remainingDays < 0) {
+        remainingDays += daysInCurrentMonth;
+      }
+
+      document.getElementById("counter").textContent = `已经过去 ${months} 个月 ${remainingDays} 天（共 ${days} 天）`;
     }
 
-    document.getElementById("days").textContent = `已经 ${diffDays} 天啦！`;
-    document.getElementById("months").textContent = `大约 ${months} 个月零 ${leftoverDays} 天 💕`;
+    updateCounter();
+    setInterval(updateCounter, 60 * 1000); // 每分钟更新一次
   </script>
 </body>
 </html>
