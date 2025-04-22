@@ -6,38 +6,44 @@
   <title>我们在一起的日子</title>
   <style>
     body {
-      font-family: "Helvetica Neue", sans-serif;
-      background: linear-gradient(to right, #fceabb, #f8b500);
+      font-family: "Arial", sans-serif;
+      background-color: #fff8f0;
       color: #333;
       text-align: center;
-      padding: 50px;
+      padding-top: 100px;
     }
 
     h1 {
-      font-size: 2.8em;
-      margin-bottom: 20px;
+      font-size: 2.5em;
     }
 
     #counter {
-      font-size: 2em;
-      margin-top: 10px;
+      font-size: 1.5em;
+      margin-top: 20px;
     }
 
-    button {
-      margin-top: 30px;
-      padding: 10px 20px;
-      background-color: #fff;
-      color: #f8b500;
-      border: 2px solid #f8b500;
-      border-radius: 10px;
-      font-size: 1em;
+    /* 右上角唱片按钮样式 */
+    .record {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background-image: url('https://cdn-icons-png.flaticon.com/512/727/727218.png');
+      background-size: cover;
+      border-radius: 50%;
+      animation: spin 4s linear infinite;
       cursor: pointer;
-      transition: all 0.3s ease;
+      z-index: 99;
     }
 
-    button:hover {
-      background-color: #f8b500;
-      color: white;
+    .paused {
+      animation-play-state: paused !important;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -45,43 +51,52 @@
   <h1>我们在一起的日子</h1>
   <div id="counter">加载中...</div>
 
-  <!-- 播放按钮 -->
-  <button onclick="document.getElementById('bg-music').play()">播放背景音乐 🎵</button>
-
-  <!-- 背景音乐 -->
+  <!-- 背景音乐（自动播放 + 循环） -->
   <audio id="bg-music" autoplay loop>
-    <source src="dream-wedding.mp3" type="audio/mpeg">
+    <source src="dream-wedding.mp3" type="audio/mpeg" />
     您的浏览器不支持 audio 标签。
   </audio>
 
+  <!-- 唱片图标 -->
+  <div class="record" id="record-icon" title="点击暂停/播放"></div>
+
   <script>
-    // 设置确定关系的日期（格式：YYYY-MM-DD）
+    // 设置确定关系的日期
     const startDate = new Date("2023-11-30");
 
     function updateCounter() {
       const now = new Date();
       const diffTime = now - startDate;
-
-      // 计算总天数
       const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-      // 计算月数和天数
       let months = (now.getFullYear() - startDate.getFullYear()) * 12 + (now.getMonth() - startDate.getMonth());
-      if (now.getDate() < startDate.getDate()) {
-        months--;
-      }
+      if (now.getDate() < startDate.getDate()) months--;
 
-      const daysInCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
       let remainingDays = now.getDate() - startDate.getDate();
       if (remainingDays < 0) {
-        remainingDays += daysInCurrentMonth;
+        const daysInLastMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+        remainingDays += daysInLastMonth;
       }
 
       document.getElementById("counter").textContent = `已经过去 ${months} 个月 ${remainingDays} 天（共 ${days} 天）`;
     }
 
     updateCounter();
-    setInterval(updateCounter, 60 * 1000); // 每分钟更新一次
+    setInterval(updateCounter, 60000);
+
+    // 控制唱片播放状态
+    const audio = document.getElementById("bg-music");
+    const record = document.getElementById("record-icon");
+
+    record.addEventListener("click", () => {
+      if (audio.paused) {
+        audio.play();
+        record.classList.remove("paused");
+      } else {
+        audio.pause();
+        record.classList.add("paused");
+      }
+    });
   </script>
 </body>
 </html>
