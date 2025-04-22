@@ -50,14 +50,14 @@
       font-size: 1.2em;
     }
 
-    /* 唱片样式 */
+    /* 自定义唱片样式 */
     .record {
       position: fixed;
       top: 20px;
       right: 20px;
-      width: 50px;
-      height: 50px;
-      background-image: url('https://cdn-icons-png.flaticon.com/512/727/727218.png');
+      width: 60px; /* 调整大小 */
+      height: 60px;
+      background-image: url('./custom-icon.png'); /* 使用相对路径指向仓库根目录 */
       background-size: cover;
       border-radius: 50%;
       animation: spin 4s linear infinite;
@@ -67,6 +67,7 @@
 
     .paused {
       animation-play-state: paused !important;
+      opacity: 0.6; /* 暂停时降低透明度 */
     }
 
     @keyframes spin {
