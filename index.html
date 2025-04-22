@@ -3,26 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>我们在一起的日子</title>
+  <title>我们认识了多久？</title>
   <style>
     body {
-      font-family: "Arial", sans-serif;
-      background-color: #fff8f0;
+      font-family: "Segoe UI", "微软雅黑", sans-serif;
+      background: linear-gradient(to right, #ffe6ec, #e6f2ff);
       color: #333;
       text-align: center;
-      padding-top: 100px;
+      padding: 60px 20px;
     }
 
     h1 {
       font-size: 2.5em;
+      margin-bottom: 20px;
     }
 
-    #counter {
-      font-size: 1.5em;
+    .emoji-title {
+      font-size: 2em;
+    }
+
+    #day-count {
+      font-size: 1.8em;
+      color: #ff4d88;
+      margin-top: 30px;
+    }
+
+    #month-count {
+      font-size: 1.6em;
+      color: #e60073;
+      margin-top: 10px;
+    }
+
+    #start-date {
+      font-size: 1.2em;
       margin-top: 20px;
     }
 
-    /* 右上角唱片按钮样式 */
+    .footer {
+      margin-top: 50px;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    .footer .heart {
+      color: red;
+      font-size: 1.2em;
+    }
+
+    /* 唱片样式 */
     .record {
       position: fixed;
       top: 20px;
@@ -34,7 +62,7 @@
       border-radius: 50%;
       animation: spin 4s linear infinite;
       cursor: pointer;
-      z-index: 99;
+      z-index: 999;
     }
 
     .paused {
@@ -48,23 +76,30 @@
   </style>
 </head>
 <body>
-  <h1>我们在一起的日子</h1>
-  <div id="counter">加载中...</div>
+  <div class="emoji-title">👩‍❤️‍👩 我们认识了多久？</div>
+  <div id="day-count">已经 X 天啦！</div>
+  <div id="month-count">大约 X 个月零 X 天 💞</div>
+  <div id="start-date">📅 从：2024年11月30日</div>
 
-  <!-- 背景音乐（自动播放 + 循环） -->
+  <div class="footer">
+    By testcsl <span class="heart">❤️</span>
+  </div>
+
+  <!-- 背景音乐 -->
   <audio id="bg-music" autoplay loop>
-    <source src="dream-wedding.mp3" type="audio/mpeg" />
+    <source src="dream-wedding.mp3" type="audio/mpeg">
     您的浏览器不支持 audio 标签。
   </audio>
 
-  <!-- 唱片图标 -->
+  <!-- 唱片播放控制 -->
   <div class="record" id="record-icon" title="点击暂停/播放"></div>
 
   <script>
-    // 设置确定关系的日期
-    const startDate = new Date("2023-11-30");
+    const startDate = new Date("2024-11-30");
+    const dayCountEl = document.getElementById("day-count");
+    const monthCountEl = document.getElementById("month-count");
 
-    function updateCounter() {
+    function updateDate() {
       const now = new Date();
       const diffTime = now - startDate;
       const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
@@ -74,17 +109,17 @@
 
       let remainingDays = now.getDate() - startDate.getDate();
       if (remainingDays < 0) {
-        const daysInLastMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-        remainingDays += daysInLastMonth;
+        const lastMonthDays = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+        remainingDays += lastMonthDays;
       }
 
-      document.getElementById("counter").textContent = `已经过去 ${months} 个月 ${remainingDays} 天（共 ${days} 天）`;
+      dayCountEl.innerHTML = `已经 <strong>${days}</strong> 天啦！`;
+      monthCountEl.innerHTML = `大约 <strong>${months}</strong> 个月零 <strong>${remainingDays}</strong> 天 💞`;
     }
 
-    updateCounter();
-    setInterval(updateCounter, 60000);
+    updateDate();
+    setInterval(updateDate, 60000);
 
-    // 控制唱片播放状态
     const audio = document.getElementById("bg-music");
     const record = document.getElementById("record-icon");
 
