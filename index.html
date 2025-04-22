@@ -55,16 +55,27 @@
     <p>📅 从：2024年11月30日</p>
   </div>
 
+  <audio id="bg-music" autoplay loop preload="auto" muted>
+    <source src="https://cdn.jsdelivr.net/gh/skyadmin/audio-cdn/music/mengzhonghunli.mp3" type="audio/mpeg">
+    您的浏览器不支持 audio 标签。
+  </audio>
+
   <footer>By testcsl &hearts;</footer>
 
   <script>
+    // 自动播放音乐，等待用户第一次交互后取消静音
+    document.addEventListener('click', () => {
+      const bgm = document.getElementById('bg-music');
+      bgm.muted = false;
+      bgm.play();
+    }, { once: true });
+
     const startDate = new Date("2024-11-30");
     const now = new Date();
 
     const diffTime = now - startDate;
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-    // 计算相差的月和天
     let months = (now.getFullYear() - startDate.getFullYear()) * 12 + (now.getMonth() - startDate.getMonth());
     let leftoverDays = now.getDate() - startDate.getDate();
     if (leftoverDays < 0) {
