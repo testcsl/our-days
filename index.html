@@ -156,6 +156,71 @@
       color: var(--accent);
     }
 
+    /* 密码锁屏 */
+    .lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: opacity 0.5s;
+    }
+
+    .lock-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .lock-icon {
+      font-size: 2em;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .lock-title {
+      font-size: 1.1em;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+    }
+
+    .lock-input {
+      width: 200px;
+      padding: 12px 20px;
+      font-size: 1.2em;
+      text-align: center;
+      border: none;
+      border-bottom: 2px solid #ddd;
+      background: transparent;
+      color: var(--text-primary);
+      outline: none;
+      letter-spacing: 8px;
+      font-variant-numeric: tabular-nums;
+      transition: border-color 0.3s;
+    }
+
+    .lock-input:focus {
+      border-color: var(--accent);
+    }
+
+    .lock-error {
+      font-size: 0.85em;
+      color: var(--accent);
+      margin-top: 16px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .lock-error.show {
+      opacity: 1;
+    }
+
     /* 旋转唱片 */
     .record {
       position: fixed;
@@ -211,6 +276,14 @@
   </style>
 </head>
 <body>
+  <!-- 密码锁屏 -->
+  <div class="lock-screen" id="lock-screen">
+    <div class="lock-icon">♥</div>
+    <div class="lock-title">请输入密码</div>
+    <input type="password" class="lock-input" id="lock-input" placeholder="••••" />
+    <div class="lock-error" id="lock-error">密码不对哦~</div>
+  </div>
+
   <div class="top-line"></div>
 
   <div class="container">
@@ -262,6 +335,34 @@
   <div class="record" id="record-icon" title="点击暂停/播放"></div>
 
   <script>
+    // ===== 密码设置（想改密码就改这里）=====
+    const PASSWORD = "161920";
+    // ====================================
+
+    const lockScreen = document.getElementById("lock-screen");
+    const lockInput = document.getElementById("lock-input");
+    const lockError = document.getElementById("lock-error");
+
+    function checkPassword() {
+      if (lockInput.value === PASSWORD) {
+        localStorage.setItem("unlocked", "true");
+        lockScreen.classList.add("hidden");
+        audio.play();
+      } else {
+        lockError.classList.add("show");
+        lockInput.value = "";
+      }
+    }
+
+    lockInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") checkPassword();
+    });
+
+    // 已经解锁过就直接进
+    if (localStorage.getItem("unlocked") === "true") {
+      lockScreen.classList.add("hidden");
+    }
+
     // 起始日期
     const startDate = new Date("2024-11-30");
 
