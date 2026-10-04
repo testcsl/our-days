@@ -2,88 +2,213 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>我们认识了多久？</title>
+  <link rel="icon" href="custom-icon.png" />
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: "Segoe UI", "微软雅黑", sans-serif;
-      background: linear-gradient(to right, #ffe6ec, #e6f2ff);
-      color: #333;
+      font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffe0ec 0%, #fff0f5 50%, #e6f0ff 100%);
+      color: #4a3b47;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 漂浮爱心背景 */
+    .hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -30px;
+      font-size: 20px;
+      animation: floatUp linear infinite;
+      opacity: 0.3;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.4;
+      }
+      90% {
+        opacity: 0.2;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
       text-align: center;
-      padding: 60px 20px;
+      max-width: 600px;
+      width: 100%;
     }
 
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-    }
-
-    .emoji-title {
-      font-size: 2em;
-    }
-
-    #day-count {
-      font-size: 1.8em;
-      color: #ff4d88;
-      margin-top: 30px;
-    }
-
-    #month-count {
+    .title {
       font-size: 1.6em;
-      color: #e60073;
-      margin-top: 10px;
+      font-weight: 300;
+      color: #b86b8a;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
     }
 
-    #start-date {
+    .days-number {
+      font-size: 5em;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff6b9d, #ee5a8a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    .days-label {
+      font-size: 1.1em;
+      color: #c47a96;
+      margin-bottom: 36px;
+      letter-spacing: 1px;
+    }
+
+    .months-box {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px 40px;
+      display: inline-block;
+      margin-bottom: 32px;
+      border: 1px solid rgba(255, 182, 206, 0.3);
+    }
+
+    .months-text {
       font-size: 1.2em;
-      margin-top: 20px;
+      color: #a85c7a;
+    }
+
+    .months-text strong {
+      font-size: 1.5em;
+      color: #e0568a;
+      margin: 0 4px;
+    }
+
+    .start-date {
+      font-size: 1em;
+      color: #9a7b8a;
+      margin-bottom: 60px;
     }
 
     .footer {
-      margin-top: 50px;
-      font-size: 0.9em;
-      color: #666;
+      font-size: 0.85em;
+      color: #b09aa5;
+      letter-spacing: 1px;
     }
 
-    .footer .heart {
-      color: red;
-      font-size: 1.2em;
+    .footer .heart-icon {
+      color: #ff6b9d;
+      margin: 0 4px;
     }
 
-    /* 自定义唱片样式 */
+    /* 旋转唱片 */
     .record {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 60px; /* 调整大小 */
-      height: 60px;
-      background-image: url('./custom-icon.png'); /* 使用相对路径指向仓库根目录 */
+      top: 24px;
+      right: 24px;
+      width: 64px;
+      height: 64px;
+      background-image: url('./custom-icon.png');
       background-size: cover;
       border-radius: 50%;
       animation: spin 4s linear infinite;
       cursor: pointer;
       z-index: 999;
+      box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
+      transition: box-shadow 0.3s;
+    }
+
+    .record:hover {
+      box-shadow: 0 4px 30px rgba(255, 107, 157, 0.5);
     }
 
     .paused {
-      animation-play-state: paused !important;
-      opacity: 0.6; /* 暂停时降低透明度 */
+      animation-play-state: paused;
+      opacity: 0.6;
     }
 
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    /* 响应式 */
+    @media (max-width: 480px) {
+      .days-number {
+        font-size: 3.5em;
+      }
+      .title {
+        font-size: 1.3em;
+      }
+      .months-box {
+        padding: 16px 28px;
+      }
+      .record {
+        width: 50px;
+        height: 50px;
+        top: 16px;
+        right: 16px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="emoji-title">👩‍❤️‍👩 我们相爱了~</div>
-  <div id="day-count">已经 X 天啦！</div>
-  <div id="month-count">大约 X 个月零 X 天 💞</div>
-  <div id="start-date">📅 从：2024年11月30日</div>
+  <!-- 漂浮爱心背景 -->
+  <div class="hearts" id="hearts-container"></div>
 
-  <div class="footer">
-    By testcsl <span class="heart">❤️</span>
+  <div class="container">
+    <div class="title">我们相爱了</div>
+    <div class="days-number" id="day-count">673</div>
+    <div class="days-label">天</div>
+    <div class="months-box">
+      <div class="months-text">
+        大约 <strong id="month-count">22</strong> 个月零 <strong id="day-remain">4</strong> 天
+      </div>
+    </div>
+    <div class="start-date">从 2024 年 11 月 30 日开始</div>
+    <div class="footer">
+      By testcsl <span class="heart-icon">♥</span>
+    </div>
   </div>
 
   <!-- 背景音乐 -->
@@ -96,9 +221,12 @@
   <div class="record" id="record-icon" title="点击暂停/播放"></div>
 
   <script>
+    // 起始日期
     const startDate = new Date("2024-11-30");
+
     const dayCountEl = document.getElementById("day-count");
     const monthCountEl = document.getElementById("month-count");
+    const dayRemainEl = document.getElementById("day-remain");
 
     function updateDate() {
       const now = new Date();
@@ -114,16 +242,17 @@
         remainingDays += lastMonthDays;
       }
 
-      dayCountEl.innerHTML = `已经 <strong>${days}</strong> 天啦！`;
-      monthCountEl.innerHTML = `大约 <strong>${months}</strong> 个月零 <strong>${remainingDays}</strong> 天 💞`;
+      dayCountEl.textContent = days;
+      monthCountEl.textContent = months;
+      dayRemainEl.textContent = remainingDays;
     }
 
     updateDate();
     setInterval(updateDate, 60000);
 
+    // 背景音乐控制
     const audio = document.getElementById("bg-music");
     const record = document.getElementById("record-icon");
-
     record.addEventListener("click", () => {
       if (audio.paused) {
         audio.play();
@@ -133,6 +262,20 @@
         record.classList.add("paused");
       }
     });
+
+    // 生成漂浮爱心
+    const heartsContainer = document.getElementById("hearts-container");
+    const heartEmojis = ["♥", "❤", "💕", "💗"];
+    for (let i = 0; i < 20; i++) {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      heart.style.left = Math.random() * 100 + "%";
+      heart.style.animationDuration = (8 + Math.random() * 12) + "s";
+      heart.style.animationDelay = Math.random() * 10 + "s";
+      heart.style.fontSize = (12 + Math.random() * 18) + "px";
+      heartsContainer.appendChild(heart);
+    }
   </script>
 </body>
 </html>
