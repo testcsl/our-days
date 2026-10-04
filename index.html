@@ -345,7 +345,6 @@
 
     function checkPassword() {
       if (lockInput.value === PASSWORD) {
-        localStorage.setItem("unlocked", "true");
         lockScreen.classList.add("hidden");
         audio.play();
       } else {
@@ -364,11 +363,6 @@
     lockInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") checkPassword();
     });
-
-    // 已经解锁过就直接进
-    if (localStorage.getItem("unlocked") === "true") {
-      lockScreen.classList.add("hidden");
-    }
 
     // 起始日期
     const startDate = new Date("2024-11-30");
