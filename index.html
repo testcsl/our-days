@@ -288,9 +288,9 @@
 
   <div class="container">
     <div class="names-row">
-      <div class="name">张胜芸</div>
+      <div class="name">陈帅林</div>
       <div class="heart-sep">♥</div>
-      <div class="name name-right">陈帅林</div>
+      <div class="name name-right">张胜芸</div>
     </div>
 
     <div class="label">我们已经在一起</div>
@@ -353,6 +353,13 @@
         lockInput.value = "";
       }
     }
+
+    lockInput.addEventListener("input", () => {
+      lockError.classList.remove("show");
+      if (lockInput.value.length === PASSWORD.length) {
+        checkPassword();
+      }
+    });
 
     lockInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") checkPassword();
